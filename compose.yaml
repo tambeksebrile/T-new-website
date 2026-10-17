@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: marketplace
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set a local database password}
+      POSTGRES_DB: marketplace
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - marketplace_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketplace -d marketplace"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  marketplace_pg:
